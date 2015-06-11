@@ -22,6 +22,7 @@ The following wiring illustration shows how to position the temperature sensor o
 * Red wire goes from the 3V header pin to the leftmost leg of the temperature sensor
 * Yellow wire goes from the GPIO#4 pin to the center leg of the temperature sensor
 * Green wire goes from the GND header pin rightmost leg of the temperature sensor
+* Place a 4.7k pull up resistor from the row with the read 3v wire to the row with the yellow GPIO#4 wire. This ensures the GPIO#4 pin does not float when there is no sensor output.
 
 ![WiringDiagram](./images/DS18B20_bb.jpg)
 
