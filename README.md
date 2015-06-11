@@ -57,15 +57,13 @@ The file consists of two lines, each containing the hexadecimal register-dump of
 Now that the temperature sensor is working, we can access the sensor from your favorite programming language(s).
 
 # python usage
-To access the temperature using a python client, edit the ds18b20_read.py file and change the device identifier value to that of your sensor:
-<!--TODO, add code to pull the sensor id from the filesystem -->
-
-	# Replace with your temp device id...
-	device="28-0314668afdff"
-
-and then run:
+To access the temperature using a python client, run:
 
 	python ds18b20_read.py
+
+This reads the temperature from the /sys/bus/w1/devices/28-*/w1_slave file contents, and then converts the temperature to Celsius and Farenheit.
+
+*TODO: mqtt example*
 
 # node usage
 To access the temperature using a nodejs client, you would first install the ds18b20 module(this has been done for you, see node_modules/ds18b20/) and then run:
