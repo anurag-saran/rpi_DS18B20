@@ -11,6 +11,7 @@ def getSensorIDs():
 
 # We assume there is only one device on the 1-wire bus...
 device = getSensorIDs()[0]
+print "Getting temperature of: "+device
 while 1:
 	tempfile = open("/sys/bus/w1/devices/"+device+"/w1_slave")
 	thetext = tempfile.read()
