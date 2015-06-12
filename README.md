@@ -63,7 +63,44 @@ To access the temperature using a python client, run:
 
 This reads the temperature from the /sys/bus/w1/devices/28-*/w1_slave file contents, and then converts the temperature to Celsius and Farenheit.
 
-*TODO: mqtt example*
+A variation of the read loop that publishes the data as a json message to an mqtt broker is found in the ds18b20_read_mqtt.py program. To see it in action, you should have two consoles open, and run the temperature publisher in one using:
+
+	python ds18b20_read_mqtt.py
+	
+while the mqtt subscriber is run in the other user:
+
+	python mqtt_read.py
+
+The output you see in the two consoles would look something like:
+
+	root@raspberrypi:/rpi_DS18B20# python tst.py 
+	publishing to: RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082515.297409}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082517.127406}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082518.947288}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082520.767277}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082522.587313}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082524.407261}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082526.227258}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082528.047264}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082529.867282}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082531.687271}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082533.507255}
+	{'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434082535.327279}
+
+
+	root@raspberrypi:/rpi_DS18B20# python mqtt_read.py 
+	Connected with result code 0
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083262.407352}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083264.237310}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083266.067311}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083267.897309}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083269.727321}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083271.557307}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083273.387295}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083275.217404}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.19, 'time': 1434083277.047355}
+	RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff {'sensorid':'28-0115162b8cff', 'temp':25.25, 'time': 1434083278.877329}
 
 # node usage
 To access the temperature using a nodejs client, you would first install the ds18b20 module(this has been done for you, see node_modules/ds18b20/) and then run:
