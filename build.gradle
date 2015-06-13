@@ -18,12 +18,26 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
+ext.commandString = { List<String> cmdLine->
+    StringBuilder info = new StringBuilder();
+    for (String s : cmdLine) {
+        info.append(s);
+        info.append(' ');
+    }
+    return info.toString();
+}
+
 task readTemp(type: JavaExec, dependsOn: classes) {
     main = 'org.jboss.summit2015.ds18b20.ReadTemperature'
     jvmArgs = ['-XX:+HeapDumpOnOutOfMemoryError']
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
+readTemp.doFirst {
+    println(commandString(commandLine))
+    println("Output:\n")
+}
+
 task readTempLoop(type: JavaExec, dependsOn: classes) {
     main = 'org.jboss.summit2015.ds18b20.ReadTemperature'
     args = ['100']
@@ -31,10 +45,19 @@ task readTempLoop(type: JavaExec, dependsOn: classes) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
+readTempLoop.doFirst {
+    println(commandString(commandLine))
+    println("Output:\n")
+}
+
 task readTempLoopMQTT(type: JavaExec, dependsOn: classes) {
     main = 'org.jboss.summit2015.ds18b20.ReadTemperatureMQTT'
     args = ['100']
     jvmArgs = ['-XX:+HeapDumpOnOutOfMemoryError']
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
+}
+readTempLoopMQTT.doFirst {
+    println(commandString(commandLine))
+    println("Output:\n")
 }
