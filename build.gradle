@@ -61,3 +61,15 @@ readTempLoopMQTT.doFirst {
     println(commandString(commandLine))
     println("Output:\n")
 }
+
+task readMQTT(type: JavaExec, dependsOn: classes) {
+    main = 'org.jboss.summit2015.ds18b20.MqttRead'
+    args = ['100']
+    jvmArgs = ['-XX:+HeapDumpOnOutOfMemoryError']
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}
+readMQTT.doFirst {
+    println(commandString(commandLine))
+    println("Output:\n")
+}

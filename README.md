@@ -111,6 +111,12 @@ To read the temperature in a loop run the ds18b20_poll.js version:
 
 	node ds18b20_poll.js
 
+The output will be like:
+
+	root@raspberrypi:~/Labs/rpi_DS18B20# node ds18b20_read.js
+	Getting temperature of: 28-0115162b8cff
+	Current temperature is 25.3125
+
 To read the temperature in a loop and publish the data as a json message to an MQTT broker run the ds18b20_poll_mqtt.js version:
 
 	node ds18b20_poll_mqtt.js
@@ -119,13 +125,76 @@ To read the temperature in a loop and publish the data as a json message to an M
 To access the temperature using a Java client, you can use the Gradle script and run:
 
 	gradle readTemp
+
+The output will be something like:
+
+	root@raspberrypi:~/Labs/rpi_DS18B20# gradle readTemp
+	Starting a new Gradle Daemon for this build (subsequent builds will be faster).
+	:compileJava UP-TO-DATE
+	:processResources UP-TO-DATE
+	:classes UP-TO-DATE
+	:readTemp
+	/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/bin/java -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Duser.country=GB -Duser.language=en -Duser.variant -cp /root/Labs/rpi_DS18B20/build/classes/main:/root/Labs/rpi_DS18B20/build/resources/main:/root/.gradle/caches/modules-2/files-2.1/org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.0.2/11752d3f24d1a9deda4533a7ca18d8496417ceeb/org.eclipse.paho.client.mqttv3-1.0.2.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-core/1.0/b479fd891a87ab398c1d9abef19de95dc8037d9/pi4j-core-1.0.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-device/1.0/a6f2229d4f6f7201a839720c948eb64e2178b3b3/pi4j-device-1.0.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-gpio-extension/1.0/8a9b6a3ee2be95f5848a2f4e2d876e9284e649d8/pi4j-gpio-extension-1.0.jar org.jboss.summit2015.ds18b20.ReadTemperature 
+	Output:
 	
+	#0: 25.38C or 77.68F
+	
+	BUILD SUCCESSFUL
+	
+	Total time: 42.404 secs
+	root@raspberrypi:~/Labs/rpi_DS18B20# 
+
+Note the that the first time gradle runs it can be slow, and it starts a daemon for caching so that subsequent runs of the task will be faster. You can copy the java command line shown in the output and run that instead if you not making changes as this will also run much faster.
+
 To read the temperature in a loop run the readTempLoop target:
 
 	gradle readTempLoop
+	
+This will read up to 100 values:
+
+	root@raspberrypi:~/Labs/rpi_DS18B20# gradle readTempLoop
+	:compileJava UP-TO-DATE
+	:processResources UP-TO-DATE
+	:classes UP-TO-DATE
+	:readTempLoop
+	/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/bin/java -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Duser.country=GB -Duser.language=en -Duser.variant -cp /root/Labs/rpi_DS18B20/build/classes/main:/root/Labs/rpi_DS18B20/build/resources/main:/root/.gradle/caches/modules-2/files-2.1/org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.0.2/11752d3f24d1a9deda4533a7ca18d8496417ceeb/org.eclipse.paho.client.mqttv3-1.0.2.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-core/1.0/b479fd891a87ab398c1d9abef19de95dc8037d9/pi4j-core-1.0.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-device/1.0/a6f2229d4f6f7201a839720c948eb64e2178b3b3/pi4j-device-1.0.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-gpio-extension/1.0/8a9b6a3ee2be95f5848a2f4e2d876e9284e649d8/pi4j-gpio-extension-1.0.jar org.jboss.summit2015.ds18b20.ReadTemperature 100 
+	Output:
+	
+	#0: 25.38C or 77.68F
+	#1: 25.44C or 77.79F
+	#2: 25.44C or 77.79F
+	#3: 25.44C or 77.79F
+	#4: 25.44C or 77.79F
+	#5: 25.44C or 77.79F
+	#6: 25.44C or 77.79F
+	#7: 25.44C or 77.79F
+	#8: 25.44C or 77.79F
+	#9: 25.44C or 77.79F
+	#10: 25.50C or 77.90F
+	...
+	#90: 25.56C or 78.01F
+	#91: 25.56C or 78.01F
+	#92: 25.56C or 78.01F
+	#93: 25.56C or 78.01F
+	#94: 25.56C or 78.01F
+	#95: 25.56C or 78.01F
+	#96: 25.56C or 78.01F
+	#97: 25.56C or 78.01F
+	#98: 25.56C or 78.01F
+	#99: 25.56C or 78.01F
+	
+	BUILD SUCCESSFUL
+	
+	Total time: 3 mins 12.578 secs
+
 
 To read the temperature in a loop and publish the data as a json message to an MQTT broker run the readTempLoopMQTT target:
 
 	gradle readTempLoopMQTT
+	
+You can see the temperature readings as they are published by running the readMQTT task in a separate console, or even better, you laptop to verifying the readings are getting off of the RaspberryPi.
+
+	gradle readMQTT
+	
 	
 
