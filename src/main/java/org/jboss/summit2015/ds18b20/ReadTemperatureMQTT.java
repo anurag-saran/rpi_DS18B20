@@ -20,7 +20,9 @@ public class ReadTemperatureMQTT {
         String id = ids.get(0);
         String topic = "RHSummit2015_temp_rpi_DS18B20/"+id;
 
-        MqttClient client = new MqttClient("tcp://iot.eclipse.org:1883", "ReadTemperatureMQTT", new MemoryPersistence());
+        // Has to be unique across all clients
+        String clientID = "SendTemperatureMQTT-" + id;
+        MqttClient client = new MqttClient("tcp://iot.eclipse.org:1883", clientID, new MemoryPersistence());
         client.connect();
         System.out.printf("Connected to: tcp://iot.eclipse.org:1883\n");
         System.out.printf("Use wget -qO- http://eclipse.mqttbridge.com/%s\nto query the published values", topic);

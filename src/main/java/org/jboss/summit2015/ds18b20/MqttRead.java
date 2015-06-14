@@ -37,7 +37,8 @@ public class MqttRead implements MqttCallback {
         String id = ids.get(0);
         String topic = "RHSummit2015_temp_rpi_DS18B20/"+id;
 
-        MqttClient client = new MqttClient("tcp://iot.eclipse.org:1883", "ReadTemperatureMQTT", new MemoryPersistence());
+        String clientID = "RecvTemperatureMQTT-" + id;
+        MqttClient client = new MqttClient("tcp://iot.eclipse.org:1883", clientID, new MemoryPersistence());
         client.connect();
         client.subscribe(topic);
         client.setCallback(this);
