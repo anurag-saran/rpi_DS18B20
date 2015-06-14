@@ -196,5 +196,45 @@ You can see the temperature readings as they are published by running the readMQ
 
 	gradle readMQTT
 	
-	
+Example output:
 
+	root@raspberrypi:~/Labs/rpi_DS18B20# gradle readMQTT
+	:compileJava UP-TO-DATE
+	:processResources UP-TO-DATE
+	:classes UP-TO-DATE
+	:readMQTT
+	/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/bin/java -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Duser.country=GB -Duser.language=en -Duser.variant -cp /root/Labs/rpi_DS18B20/build/classes/main:/root/Labs/rpi_DS18B20/build/resources/main:/root/.gradle/caches/modules-2/files-2.1/org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.0.2/11752d3f24d1a9deda4533a7ca18d8496417ceeb/org.eclipse.paho.client.mqttv3-1.0.2.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-core/1.0/b479fd891a87ab398c1d9abef19de95dc8037d9/pi4j-core-1.0.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-device/1.0/a6f2229d4f6f7201a839720c948eb64e2178b3b3/pi4j-device-1.0.jar:/root/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-gpio-extension/1.0/8a9b6a3ee2be95f5848a2f4e2d876e9284e649d8/pi4j-gpio-extension-1.0.jar org.jboss.summit2015.ds18b20.MqttRead 100 
+	When running on a host other than the RaspberryPi, pass in -PdeviceID=28-xxx... where deviceID is the temperature sensor id
+	Output:
+	
+	Connected to: tcp://iot.eclipse.org:1883, reading 100 messages
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244297299}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244299221}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244301141}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244303070}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244305010}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244306929}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244308851}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244310790}
+	messageArrived, topic=RHSummit2015_temp_rpi_DS18B20/28-0115162b8cff, msg={'sensorid':'28-0115162b8cff', 'temp':25.4, 'time': 1434244312719}
+
+Note that if you see an error message like the following, it is due to having two clients with the same connection id:
+
+	connectionLost
+	Connection lost (32109) - java.io.EOFException
+		at org.eclipse.paho.client.mqttv3.internal.CommsReceiver.run(CommsReceiver.java:146)
+		at java.lang.Thread.run(Thread.java:744)
+	Caused by: java.io.EOFException
+		at java.io.DataInputStream.readByte(DataInputStream.java:267)
+		at org.eclipse.paho.client.mqttv3.internal.wire.MqttInputStream.readMqttWireMessage(MqttInputStream.java:65)
+		at org.eclipse.paho.client.mqttv3.internal.CommsReceiver.run(CommsReceiver.java:107)
+		... 1 more
+
+This would happen if you try running the readMQTT task on on both the RaspberryPi and your laptop. To allow both clients to run, edit the org.jboss.summit2015.ds18b20.MqttRead class and find the following TODO about making the clientID string unique:
+
+```java
+
+        // TODO: if your running multiple clients you need to make this unique, "RecvTemperatureMQTT#N-" + id;
+        // where #N = #1, #2, #3, ...
+        String clientID = "RecvTemperatureMQTT-" + id;
+```

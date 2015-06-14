@@ -65,11 +65,14 @@ readTempLoopMQTT.doFirst {
 task readMQTT(type: JavaExec, dependsOn: classes) {
     main = 'org.jboss.summit2015.ds18b20.MqttRead'
     args = ['100']
+    if (project.hasProperty('deviceID')) {
+        args(deviceID)
+    }
     jvmArgs = ['-XX:+HeapDumpOnOutOfMemoryError']
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
 readMQTT.doFirst {
     println(commandString(commandLine))
-    println("Output:\n")
+    println("When running on a host other than the RaspberryPi, pass in -PdeviceID=28-xxx... where deviceID is the temperature sensor id\nOutput:\n")
 }

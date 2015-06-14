@@ -31,12 +31,12 @@ public class MqttRead implements MqttCallback {
 
     }
 
-    public void run(int count) throws Exception {
+    public void run(int count, String id) throws Exception {
         // Just grab first sensor
-        List<String> ids = OneWireSensor.getSensorIDs();
-        String id = ids.get(0);
         String topic = "RHSummit2015_temp_rpi_DS18B20/"+id;
 
+        // TODO: if your running multiple clients you need to make this unique, "RecvTemperatureMQTT#N-" + id;
+        // where #N = #1, #2, #3, ...
         String clientID = "RecvTemperatureMQTT-" + id;
         MqttClient client = new MqttClient("tcp://iot.eclipse.org:1883", clientID, new MemoryPersistence());
         client.connect();
@@ -51,9 +51,17 @@ public class MqttRead implements MqttCallback {
     }
     public static void main(String[] args) throws Exception {
         int count = 1;
+        String deviceID;
         if(args.length > 0)
             count = Integer.parseInt(args[0]);
+        if(args.length == 2) {
+            deviceID = args[1];
+        } else {
+            List<String> ids = OneWireSensor.getSensorIDs();
+            deviceID = ids.get(0);
+        }
+
         MqttRead reader = new MqttRead();
-        reader.run(count);
+        reader.run(count, deviceID);
     }
 }

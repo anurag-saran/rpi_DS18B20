@@ -30,9 +30,9 @@ public class ReadTemperatureMQTT {
         for(int n = 0; n < count; n ++) {
             double temp = tempSensor.getTemperature();
             double tempF = temp * 1.8 + 32;
-            System.out.printf("#%d: %.2fC or %.2fF\n", n, temp, tempF);
             String json = String.format("{'sensorid':'%s', 'temp':%.1f, 'time': %d}", id, temp, System.currentTimeMillis());
             client.publish(topic, json.getBytes(), 1, true);
+            System.out.printf("#%d: json=%s or %.2fF\n", n, json, tempF);
             Thread.sleep(1000);
         }
         client.disconnect();
